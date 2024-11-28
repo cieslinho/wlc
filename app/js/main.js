@@ -1,32 +1,151 @@
 document.addEventListener('DOMContentLoaded', function () {
-	const form = document.getElementById('feedback-form')
+	const form = document.getElementById('feedback-form') // feedback form
+	const feedbackList = document.getElementById('feedback-list') // feedback list
+	const paginationContainer = document.querySelector('.feedback__pagination') // pagination feedback
+	const feedbackDetails = document.getElementById('feedback-details') // container for feedback details
+	const feedbackDetailsContent = document.getElementById('feedback-details-content') // content feedback details
 
-	form.addEventListener('submit', function (e) {
-		e.preventDefault() // Zablokowanie standardowego wysyłania formularza
+	// load feedback
+	function loadFeedbacks(page) {
+		const formData = new FormData()
+		formData.append('action', 'load_feedbacks')
+		formData.append('page', page)
+		formData.append('security', feedbackFormData.nonce)
 
-		const formData = new FormData(form)
-
-		// Dodanie nonce i action do danych formularza
-		formData.append('action', 'submit_feedback')
-		formData.append('security', feedbackFormData.nonce) // Dodanie nonce
-
-		// Wysyłanie danych za pomocą AJAX
 		fetch(feedbackFormData.ajaxurl, {
 			method: 'POST',
 			body: formData,
 		})
 			.then(response => response.json())
 			.then(data => {
-				console.log(data) // Logowanie odpowiedzi z serwera, aby sprawdzić dane
 				if (data.success) {
-					alert(data.data.message) // Jeśli sukces, wyświetl wiadomość
-					form.reset() // Resetowanie formularza po udanym wysłaniu
+					feedbackList.innerHTML = data.data.feedbacks
+
+					const pagination = data.data.pagination
+					let paginationHTML = ''
+
+					if (pagination.has_prev) {
+						paginationHTML += `<button class="pagination__prev" data-page="${
+							pagination.current_page - 1
+						}">Previous</button>`
+					}
+
+					if (pagination.has_next) {
+						paginationHTML += `<button class="pagination__next" data-page="${
+							pagination.current_page + 1
+						}">Next</button>`
+					}
+
+					paginationContainer.innerHTML = paginationHTML
+
+					addPaginationListeners()
+
+					addFeedbackDetailsListeners()
 				} else {
-					alert(data.data.message) // Jeśli błąd, wyświetl wiadomość o błędzie
+					console.error('Error loading feedbacks:', data.data.message || 'Unknown error')
+					feedbackList.innerHTML = '<p>Error loading feedbacks.</p>'
+					paginationContainer.innerHTML = ''
+				}
+			})
+			.catch(error => console.error('Fetch error:', error))
+	}
+
+	function addPaginationListeners() {
+		const paginationButtons = paginationContainer.querySelectorAll('.pagination__prev, .pagination__next')
+
+		paginationButtons.forEach(button => {
+			button.addEventListener('click', function (e) {
+				e.preventDefault()
+				const newPage = parseInt(this.getAttribute('data-page'), 10)
+				loadFeedbacks(newPage)
+			})
+		})
+	}
+
+	function addFeedbackDetailsListeners() {
+		const viewFeedbackButtons = feedbackList.querySelectorAll('.view-feedback')
+
+		viewFeedbackButtons.forEach(button => {
+			button.addEventListener('click', function (e) {
+				const feedbackId = button.getAttribute('data-id')
+				loadFeedbackDetails(feedbackId)
+			})
+		})
+	}
+
+	function loadFeedbackDetails(feedbackId) {
+		const formData = new FormData()
+		formData.append('action', 'load_feedback_details')
+		formData.append('feedback_id', feedbackId)
+		formData.append('security', feedbackFormData.nonce)
+
+		fetch(feedbackFormData.ajaxurl, {
+			method: 'POST',
+			body: formData,
+		})
+			.then(response => response.json())
+			.then(data => {
+				console.log('Server response:', data)
+
+				if (data.success) {
+					console.log('Received data:', data.data)
+					feedbackDetails.style.display = 'block'
+					feedbackDetailsContent.innerHTML = `
+                        <p class="feedback__result">${feedbackFormData.labels.first_name}: ${
+						data.data.first_name ? data.data.first_name : 'No data'
+					}</p>
+                        <p class="feedback__result">${feedbackFormData.labels.last_name}: ${
+						data.data.last_name ? data.data.last_name : 'No data'
+					}</p>
+                        <p class="feedback__result">${feedbackFormData.labels.email}: <a href="mailto:${
+						data.data.email || ''
+					}">${data.data.email ? data.data.email : 'No data'}</a></p>
+                        <p class="feedback__result">${feedbackFormData.labels.subject}: ${
+						data.data.subject ? data.data.subject : 'No data'
+					}</p>
+                        <p class="feedback__result">${feedbackFormData.labels.message}: ${
+						data.data.message ? data.data.message : 'No data'
+					}</p>
+                    `
+				} else {
+					console.error('Error loading feedback details:', data.data ? data.data.message : 'Unknown error')
+					feedbackDetails.style.display = 'none'
+					feedbackDetailsContent.innerHTML = ''
 				}
 			})
 			.catch(error => {
-				console.error('Error:', error) // Logowanie błędów
+				console.error('Fetch error:', error)
+				feedbackDetails.style.display = 'none'
+				feedbackDetailsContent.innerHTML = ''
 			})
-	})
+	}
+
+	if (form) {
+		form.addEventListener('submit', function (e) {
+			e.preventDefault()
+
+			const formData = new FormData(form)
+			formData.append('action', 'submit_feedback')
+			formData.append('security', feedbackFormData.nonce)
+
+			fetch(feedbackFormData.ajaxurl, {
+				method: 'POST',
+				body: formData,
+			})
+				.then(response => response.json())
+				.then(data => {
+					if (data.success) {
+						alert(data.data.message)
+						form.reset()
+						loadFeedbacks(1)
+					} else {
+						alert(data.data.message || 'Error submitting feedback')
+					}
+				})
+				.catch(error => console.error('Submit error:', error))
+		})
+	}
+
+	// init
+	loadFeedbacks(1)
 })
