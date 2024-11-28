@@ -3,6 +3,8 @@
 namespace CustomFeedback;
 
 class FeedbackPlugin {
+
+    // init
     public static function init() {
         add_action('init', [self::class, 'load_textdomain']);
         add_action('init', [self::class, 'register_blocks']);
@@ -10,15 +12,21 @@ class FeedbackPlugin {
         FeedbackAjax::init();
     }
 
+    // translation
+
     public static function load_textdomain() {
         load_plugin_textdomain('feedback-form', false, dirname(plugin_basename(__FILE__)) . '/languages/');
     }
+
+    // register blocks
 
     public static function register_blocks() {
         FeedbackFormBlock::register();
         FeedbackListBlock::register();
     }
 
+
+    // db action
     public static function setup_database() {
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
         global $wpdb;
