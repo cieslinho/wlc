@@ -11,7 +11,11 @@
  defined('ABSPATH') || exit;
 
 require_once plugin_dir_path(__FILE__) . 'includes/class-form-plugin.php';
+require_once plugin_dir_path(__FILE__) . 'includes/class-feedback-assets.php';
+
 
 use CustomFeedback\FeedbackPlugin;
+use CustomFeedback\FeedbackAssets;
 
 FeedbackPlugin::init();
+FeedbackAssets::init();
