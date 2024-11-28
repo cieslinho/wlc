@@ -42,11 +42,11 @@ if (current_user_can('manage_options')) : ?>
 
             // pagination
             if ($page > 1) {
-                echo '<button class="pagination__prev" data-page="' . ($page - 1) . '">Previous</button>';
+                echo '<button class="feedback__prev" data-page="' . ($page - 1) . '">Previous</button>';
             }
 
             if ($page < $total_pages) {
-                echo '<button class="pagination__next" data-page="' . ($page + 1) . '">Next</button>';
+                echo '<button class="feedback__next" data-page="' . ($page + 1) . '">Next</button>';
             }
             ?>
         </div>

@@ -25,15 +25,13 @@ document.addEventListener('DOMContentLoaded', function () {
 					let paginationHTML = ''
 
 					if (pagination.has_prev) {
-						paginationHTML += `<button class="pagination__prev" data-page="${
+						paginationHTML += `<button class="feedback__prev" data-page="${
 							pagination.current_page - 1
 						}">Previous</button>`
 					}
 
 					if (pagination.has_next) {
-						paginationHTML += `<button class="pagination__next" data-page="${
-							pagination.current_page + 1
-						}">Next</button>`
+						paginationHTML += `<button class="feedback__next" data-page="${pagination.current_page + 1}">Next</button>`
 					}
 
 					paginationContainer.innerHTML = paginationHTML
@@ -51,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	}
 
 	function addPaginationListeners() {
-		const paginationButtons = paginationContainer.querySelectorAll('.pagination__prev, .pagination__next')
+		const paginationButtons = paginationContainer.querySelectorAll('.feedback__prev, .feedback__next')
 
 		paginationButtons.forEach(button => {
 			button.addEventListener('click', function (e) {
@@ -89,23 +87,23 @@ document.addEventListener('DOMContentLoaded', function () {
 
 				if (data.success) {
 					console.log('Received data:', data.data)
-					feedbackDetails.style.display = 'block'
+					feedbackDetails.style.display = 'flex'
 					feedbackDetailsContent.innerHTML = `
-                        <p class="feedback__result">${feedbackFormData.labels.first_name}: ${
+                        <p class="feedback__result">${feedbackFormData.labels.first_name}: <span>${
 						data.data.first_name ? data.data.first_name : 'No data'
-					}</p>
-                        <p class="feedback__result">${feedbackFormData.labels.last_name}: ${
+					}</span></p>
+                        <p class="feedback__result">${feedbackFormData.labels.last_name}: <span>${
 						data.data.last_name ? data.data.last_name : 'No data'
-					}</p>
+					}</span></p>
                         <p class="feedback__result">${feedbackFormData.labels.email}: <a href="mailto:${
 						data.data.email || ''
 					}">${data.data.email ? data.data.email : 'No data'}</a></p>
-                        <p class="feedback__result">${feedbackFormData.labels.subject}: ${
+                        <p class="feedback__result">${feedbackFormData.labels.subject}: <span>${
 						data.data.subject ? data.data.subject : 'No data'
-					}</p>
-                        <p class="feedback__result">${feedbackFormData.labels.message}: ${
+					}</span></p>
+                        <p class="feedback__result">${feedbackFormData.labels.message}: <span>${
 						data.data.message ? data.data.message : 'No data'
-					}</p>
+					}</span></p>
                     `
 				} else {
 					console.error('Error loading feedback details:', data.data ? data.data.message : 'Unknown error')
