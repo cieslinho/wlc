@@ -1,1 +1,1 @@
-console.log("test");
+document.addEventListener("DOMContentLoaded",function(){const e=document.getElementById("feedback-form");e.addEventListener("submit",function(t){t.preventDefault();const a=new FormData(e);a.append("action","submit_feedback"),a.append("security",feedbackFormData.nonce),fetch(feedbackFormData.ajaxurl,{method:"POST",body:a}).then(e=>e.json()).then(t=>{console.log(t),t.success?(alert(t.data.message),e.reset()):alert(t.data.message)}).catch(e=>{console.error("Error:",e)})})});

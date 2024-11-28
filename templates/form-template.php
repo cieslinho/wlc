@@ -1,6 +1,6 @@
 <section class="feedback">
     <div class="container">
-        <form id="feedback__form">
+        <form class="feedback__form" id="feedback-form">
             <div class="feedback__row">
                 <input type="text" name="first_name" placeholder="<?php _e('First Name', 'feedback-form'); ?>" required>
                 <input type="text" name="last_name" placeholder="<?php _e('Last Name', 'feedback-form'); ?>" required>
@@ -18,6 +18,7 @@
                 </button>
             </div>
             <input type="hidden" name="security" value="<?php echo wp_create_nonce('feedback_form_nonce'); ?>">
+
         </form>
     </div>
 </section>
