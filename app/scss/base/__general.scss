@@ -1,0 +1,17 @@
+html {
+	scroll-behavior: smooth;
+	font-size: 62.5%;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	color: $black;
+	font-size: 1.6rem;
+	font-family: 'Poppins', sans-serif;
+}
+
+a,
+button {
+	cursor: pointer;
+}

@@ -1,0 +1,37 @@
+@mixin respond($breakpoint) {
+	@if $breakpoint == mobile-max {
+		@media only screen and (min-width: 567px) {
+			@content;
+		}
+	}
+	@if $breakpoint == mobile {
+		@media only screen and (min-width: 767px) {
+			@content;
+		}
+	}
+
+	@if $breakpoint == tablet {
+		@media only screen and (min-width: 1023px) {
+			@content;
+		}
+	}
+}
+
+@mixin container() {
+	margin: 0 auto;
+	padding: 0.5em 1em;
+	width: 100%;
+	max-width: 1400px;
+
+	@include respond(tablet) {
+		padding: 1.5em 2em;
+	}
+}
+
+@mixin sectionPadding {
+	padding: 1.5em 0;
+
+	@include respond(tablet) {
+		padding: 3em 0;
+	}
+}
