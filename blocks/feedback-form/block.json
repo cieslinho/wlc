@@ -1,0 +1,10 @@
+{
+	"apiVersion": 2,
+	"name": "custom-feedback/feedback-form",
+	"title": "Feedback Form",
+	"description": "A custom feedback form.",
+	"category": "widgets",
+	"icon": "forms",
+	"editorScript": "file:../../assets/js/feedback-form.js",
+	"script": "file:../../assets/js/feedback-form.js"
+}

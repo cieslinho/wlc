@@ -20,3 +20,6 @@ require_once plugin_dir_path(__FILE__) . 'includes/class-feedback-ajax.php';
 use CustomFeedback\FeedbackPlugin;
 
 FeedbackPlugin::init();
+// CustomFeedback\FeedbackAssets::init();
+
+

@@ -1,0 +1,10 @@
+{
+	"apiVersion": 2,
+	"name": "custom-feedback/feedback-list",
+	"title": "Feedback List",
+	"description": "A custom feedback list for admin.",
+	"category": "widgets",
+	"icon": "list-view",
+	"editorScript": "file:../../assets/js/feedback-list.js",
+	"script": "file:../../assets/js/feedback-list.js"
+}
